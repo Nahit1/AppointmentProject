@@ -1,6 +1,7 @@
 using AppointmentApp.API.Context;
 using AppointmentApp.API.Models.Common;
 using AppointmentApp.API.Models.Entity;
+using FluentValidation;
 using MediatR;
 
 namespace AppointmentApp.API.Features.Services.CreateService;
@@ -9,6 +10,18 @@ public sealed record CreateServiceCommand(string Name, int DurationMin, int Buff
     : IRequest<Response<ServiceCreatedDto>>;
 
 public sealed record ServiceCreatedDto(Guid Id);
+
+public class CreateServiceHandlerValidator : AbstractValidator<CreateServiceCommand>
+{
+    public CreateServiceHandlerValidator()
+    {
+        RuleFor(x => x.Name).NotEmpty().MaximumLength(120);
+        RuleFor(x => x.DurationMin).GreaterThan(0);
+        RuleFor(x => x.BufferBeforeMin).GreaterThanOrEqualTo(0);
+        RuleFor(x => x.BufferAfterMin).GreaterThanOrEqualTo(0);
+        RuleFor(x => x.Price).GreaterThanOrEqualTo(0).When(x => x.Price.HasValue);
+    }
+}
 
 
 public class CreateServiceHandler(AppointmentDbContext db):IRequestHandler<CreateServiceCommand, Response<ServiceCreatedDto>>

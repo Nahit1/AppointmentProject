@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AppointmentApp.API.Features.Services.GetServices;
 
-public class GetServicesEndPoint:ICarterModule
+public class GetServicesEndpoint:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {

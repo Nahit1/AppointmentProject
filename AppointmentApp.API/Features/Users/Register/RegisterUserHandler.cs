@@ -12,13 +12,16 @@ public sealed record RegisterUserCommand(string Email, string PasswordHash, stri
 
 public sealed record UserRegisteredDto(Guid Id, string Email, string DisplayName, string Timezone);
 
-// public class RegisterHandlerCommandValidator : AbstractValidator<RegisterUserCommand>
-// {
-//     public RegisterHandlerCommandValidator()
-//     {
-//         RuleFor(x => x.Email).NotEmpty().WithMessage("Name is required");
-//     }
-// }
+public class RegisterHandlerCommandValidator : AbstractValidator<RegisterUserCommand>
+{
+    public RegisterHandlerCommandValidator()
+    {
+        RuleFor(x => x.Email).NotEmpty().EmailAddress();
+        RuleFor(x => x.PasswordHash).NotEmpty().MinimumLength(6); // MVP
+        RuleFor(x => x.DisplayName).NotEmpty().MaximumLength(120);
+        RuleFor(x => x.Timezone).NotEmpty().MaximumLength(64);
+    }
+}
 
 public sealed class RegisterUserHandler(AppointmentDbContext db):IRequestHandler<RegisterUserCommand, Response<UserRegisteredDto>>
 {

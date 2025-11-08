@@ -4,7 +4,7 @@ using MediatR;
 
 namespace AppointmentApp.API.Features.Customers.GetCustomers;
 
-public class GetCustomerEndPoint:ICarterModule
+public class GetCustomerEndpoint:ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
